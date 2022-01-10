@@ -7,51 +7,33 @@ import Header from "../header/header";
 import Preview from "../preview/preview";
 import styles from "./maker.module.css";
 
-const Maker = ({ FileInput, authService }) => {
-  const [cards, setCards] = useState({
-    1: {
-      id: "1",
-      name: "jiwon",
-      company: "Samsung",
-      theme: "light",
-      title: "SoftWare Engineer",
-      email: "njw10099@gmail.com",
-      message: "go for it",
-      fileName: null,
-      fileURL: null,
-    },
-    2: {
-      id: "2",
-      name: "jiwon2",
-      company: "Samsung",
-      theme: "dark",
-      title: "SoftWare Engineer",
-      email: "njw10099@gmail.com",
-      message: "go for it",
-      fileName: null,
-      fileURL: null,
-    },
-    3: {
-      id: "3",
-      name: "jiwon3",
-      company: "Samsung",
-      theme: "colorful",
-      title: "SoftWare Engineer",
-      email: "njw10099@gmail.com",
-      message: "go for it",
-      fileName: null,
-      fileURL: null,
-    },
-  });
-
+const Maker = ({ FileInput, authService, cardRepository }) => {
   const history = useHistory();
+  const historyState = history?.location?.state;
+  const [cards, setCards] = useState({});
+  const [userId, setUserID] = useState(historyState && historyState.id);
+
   const onLogout = () => {
     authService.logout();
   };
 
   useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    const stopSync = cardRepository.syncCards(userId, (cards) => {
+      setCards(cards);
+    });
+    return () => stopSync();
+    // unmount되었을 때(컴포넌트가 더이상 보여지지 않을 때) 리턴 해줄 수 있음
+    // 어떤 함수를 리턴하면 컴포넌트가 unmount 되었을 때 알아서 이 리턴한 함수를 호출해줌
+  }, [userId]); // 컴포넌트가 mount되었을 때 그리고 userId가 업데이트 되었을 때 useEffect 호출
+
+  useEffect(() => {
     authService.onAuthChange((user) => {
-      if (!user) {
+      if (user) {
+        setUserID(user.uid);
+      } else {
         history.push("/");
       }
     });
@@ -63,6 +45,7 @@ const Maker = ({ FileInput, authService }) => {
       updated[card.id] = card;
       return updated;
     });
+    cardRepository.saveCard(userId, card);
   };
 
   const deleteCard = (card) => {
@@ -71,6 +54,7 @@ const Maker = ({ FileInput, authService }) => {
       delete updated[card.id];
       return updated;
     });
+    cardRepository.removeCard(userId, card);
   };
 
   return (
