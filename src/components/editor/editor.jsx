@@ -3,14 +3,20 @@ import CardAddForm from "../card_add_form/card_add_form";
 import CardEditForm from "../card_edit_form/card_edit_form";
 import styles from "./editor.module.css";
 
-const Editor = ({ cards, addCard }) => (
+const Editor = ({ FileInput, cards, addCard, updateCard, deleteCard }) => (
   <section className={styles.editor}>
     <h1 className={styles.title}>Card Maker</h1>
-    {cards.map((card) => (
-      <CardEditForm key={card.id} card={card} />
+    {Object.keys(cards).map((key) => (
+      <CardEditForm
+        key={key}
+        FileInput={FileInput}
+        card={cards[key]}
+        updateCard={updateCard}
+        deleteCard={deleteCard}
+      />
     ))}
-    <CardAddForm onAdd={addCard} />
+    <CardAddForm FileInput={FileInput} onAdd={addCard} />
   </section>
 );
-
+// Onject.keys(cards).map => cards object에 있는 모든 key들을 빙글빙글 돔
 export default Editor;

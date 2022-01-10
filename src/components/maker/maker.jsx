@@ -7,9 +7,9 @@ import Header from "../header/header";
 import Preview from "../preview/preview";
 import styles from "./maker.module.css";
 
-const Maker = ({ authService }) => {
-  const [cards, setCards] = useState([
-    {
+const Maker = ({ FileInput, authService }) => {
+  const [cards, setCards] = useState({
+    1: {
       id: "1",
       name: "jiwon",
       company: "Samsung",
@@ -17,10 +17,10 @@ const Maker = ({ authService }) => {
       title: "SoftWare Engineer",
       email: "njw10099@gmail.com",
       message: "go for it",
-      fileName: "jiwon",
+      fileName: null,
       fileURL: null,
     },
-    {
+    2: {
       id: "2",
       name: "jiwon2",
       company: "Samsung",
@@ -28,10 +28,10 @@ const Maker = ({ authService }) => {
       title: "SoftWare Engineer",
       email: "njw10099@gmail.com",
       message: "go for it",
-      fileName: "jiwon",
-      fileURL: "jiwon.png",
+      fileName: null,
+      fileURL: null,
     },
-    {
+    3: {
       id: "3",
       name: "jiwon3",
       company: "Samsung",
@@ -39,10 +39,10 @@ const Maker = ({ authService }) => {
       title: "SoftWare Engineer",
       email: "njw10099@gmail.com",
       message: "go for it",
-      fileName: "jiwon",
+      fileName: null,
       fileURL: null,
     },
-  ]);
+  });
 
   const history = useHistory();
   const onLogout = () => {
@@ -57,16 +57,33 @@ const Maker = ({ authService }) => {
     });
   });
 
-  const addCard = (card) => {
-    const updated = [...cards, card];
-    setCards(updated);
+  const createOrUpdateCard = (card) => {
+    setCards((cards) => {
+      const updated = { ...cards };
+      updated[card.id] = card;
+      return updated;
+    });
+  };
+
+  const deleteCard = (card) => {
+    setCards((cards) => {
+      const updated = { ...cards };
+      delete updated[card.id];
+      return updated;
+    });
   };
 
   return (
     <section className={styles.maker}>
       <Header onLogout={onLogout} />
       <div className={styles.container}>
-        <Editor cards={cards} addCard={addCard} />
+        <Editor
+          FileInput={FileInput}
+          cards={cards}
+          addCard={createOrUpdateCard}
+          updateCard={createOrUpdateCard}
+          deleteCard={deleteCard}
+        />
         <Preview cards={cards} />
       </div>
       <Footer />
