@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./app";
@@ -10,9 +10,9 @@ import CardRepository from "./service/card_repository";
 const authService = new AuthService();
 const cardRepository = new CardRepository();
 const imageUploader = new ImageUploader();
-const FileInput = (props) => (
+const FileInput = memo((props) => (
   <ImageFileInput {...props} imageUploader={imageUploader} />
-);
+));
 // make component. 컴포넌트를 한 단계 더 감싼 거라고 생각하면됨
 // 이 컴포넌트 자체를 어플리케이션이나 다른 컴포넌트로 전달
 // props을 전달받기 때문에 확장성 up
