@@ -7,7 +7,6 @@ const Card = memo(({ card }) => {
   const { name, company, title, theme, email, message, fileURL } = card;
   // deconstructung: card object의 속성들이 각 변수에 들어감
   const url = fileURL || DEFAULT_IMAGE;
-
   return (
     <li className={`${styles.card} ${getStyles(theme)}`}>
       <img className={styles.avatar} src={url} alt="profile" />

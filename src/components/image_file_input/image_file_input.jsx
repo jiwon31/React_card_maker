@@ -1,5 +1,4 @@
-import React, { memo, useState } from "react";
-import { useRef } from "react/cjs/react.development";
+import React, { memo, useState, useRef } from "react";
 import styles from "./image_file_input.module.css";
 
 const ImageFileInput = memo(({ imageUploader, name, onFileChange }) => {

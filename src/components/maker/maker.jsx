@@ -1,6 +1,5 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { useEffect } from "react/cjs/react.development";
 import Editor from "../editor/editor";
 import Footer from "../footer/footer";
 import Header from "../header/header";
